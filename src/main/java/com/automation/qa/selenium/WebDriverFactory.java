@@ -31,7 +31,7 @@ public class WebDriverFactory {
     /**
      * Creates and configures a ChromeDriver instance.
      *
-     * @param headless true to run without opening GUI window, false to run headed
+     * @param headless true to run without opening GUI window, false to run headed (visible browser)
      * @return ready-to-use WebDriver instance
      */
     public static WebDriver createChromeDriver(boolean headless) {
@@ -39,13 +39,16 @@ public class WebDriverFactory {
 
         if (headless) {
             options.addArguments("--headless=new");
+        } else {
+            // Headed mode: give window clean focus and size for visual observation
+            options.addArguments("--start-maximized");
         }
 
         // Essential arguments for stability in modern automated environments
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--window-size=1280,900");
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--disable-blink-features=AutomationControlled");
 
@@ -73,10 +76,28 @@ public class WebDriverFactory {
     }
 
     /**
-     * Convenience helper to create a default headless driver for automated tests.
+     * Creates a visible (headed) browser driver so the real Chrome window opens
+     * visually on the screen for test observation.
+     */
+    public static WebDriver createHeadedDriver() {
+        return createChromeDriver(false);
+    }
+
+    /**
+     * Creates a headless browser driver (useful for background CI/CD runs).
+     */
+    public static WebDriver createHeadlessDriver() {
+        return createChromeDriver(true);
+    }
+
+    /**
+     * Convenience helper to create the default driver.
+     * Defaults to HEADED mode (visible window). To override to headless in CI,
+     * pass `-Dheadless=true`.
      */
     public static WebDriver createDefaultDriver() {
-        return createChromeDriver(true);
+        boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
+        return createChromeDriver(headless);
     }
 
     /**

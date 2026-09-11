@@ -148,7 +148,7 @@ Run either test suite directly in **IntelliJ IDEA**, **Eclipse**, or **VS Code /
 File: [`InterviewProgramsTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/InterviewProgramsTest.java)
 
 ```bash
-# Standalone Main Runner (runs 20 tests with zero config):
+# Standalone Main Runner (runs 20 tests with visible Chrome browser):
 Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest.main()'
 ```
 
@@ -156,8 +156,17 @@ Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest.main()'
 File: [`SeleniumRealWebsiteTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/SeleniumRealWebsiteTest.java)
 
 ```bash
-# Standalone Main Runner (runs all 8 live website scenarios):
+# Standalone Main Runner (runs all 8 live website scenarios in headed mode):
 Right-click SeleniumRealWebsiteTest.java -> Run 'SeleniumRealWebsiteTest.main()'
 ```
+
+> [!TIP]
+> **Headed vs Headless Execution**:
+> - **Headed Mode (Default)**: Automatically opens a visible Chrome window on your screen for visual interaction and debugging.
+> - **Headless Mode**: To run silently without opening a browser window (e.g. in CI/CD pipelines), run with `-Dheadless=true`:
+>   ```bash
+>   java -Dheadless=true -cp ... com.automation.qa.SeleniumRealWebsiteTest
+>   ```
+
 
 
