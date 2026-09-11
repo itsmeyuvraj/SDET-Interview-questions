@@ -1,0 +1,12 @@
+target/
+bin/
+.DS_Store
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse / VS Code cache
+.settings/
+.vscode/
