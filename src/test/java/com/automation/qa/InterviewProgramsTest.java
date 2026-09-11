@@ -4,6 +4,7 @@ import com.automation.qa.arrays.*;
 import com.automation.qa.collections.MapIterationAndSorting;
 import com.automation.qa.numbers.*;
 import com.automation.qa.sdetpatterns.RegexForQAValidation;
+import com.automation.qa.selenium.*;
 import com.automation.qa.strings.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -148,6 +149,15 @@ public class InterviewProgramsTest {
         assertEquals("Chrome", sortedDesc.keySet().iterator().next());
     }
 
+    @Test
+    @DisplayName("Selenium: Broken Links Status Checker")
+    void testBrokenLinkChecker() {
+        BrokenLinksAndImagesChecker.LinkValidationResult result = 
+                BrokenLinksAndImagesChecker.checkUrlStatus("https://www.google.com");
+        assertEquals(200, result.statusCode);
+        assertFalse(result.isBroken);
+    }
+
     /**
      * Standalone main method: Allows running all tests as a standard Java Application
      * in ANY IDE (IntelliJ, Eclipse, VS Code) without requiring test runner configuration!
@@ -176,7 +186,8 @@ public class InterviewProgramsTest {
             "Armstrong Number Check",
             "Palindrome Number Without String Conversion",
             "Regex Order ID & OTP Extraction",
-            "Sort Map by Values"
+            "Sort Map by Values",
+            "Selenium Broken Link Status Checker"
         };
 
         Runnable[] tests = {
@@ -197,7 +208,8 @@ public class InterviewProgramsTest {
             suite::testArmstrongNumber,
             suite::testPalindromeNumber,
             suite::testRegexExtractors,
-            suite::testSortMapByValues
+            suite::testSortMapByValues,
+            suite::testBrokenLinkChecker
         };
 
         for (int i = 0; i < tests.length; i++) {

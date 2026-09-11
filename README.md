@@ -104,11 +104,31 @@ The most heavily tested category in Automation QA technical rounds.
 
 ---
 
+### 7. Popular Selenium WebDriver Solutions (`com.automation.qa.selenium`)
+Most heavily asked real-time browser automation scenarios in technical interviews.
+
+| File | Problem Statement & Concepts | Primary Interview Focus |
+| :--- | :--- | :--- |
+| [`DynamicWebTableHandler.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/DynamicWebTableHandler.java) | Parse HTML table into `List<Map<String, String>>`, click row action buttons, handle pagination. | Relative XPath axes (`following-sibling`, `ancestor`), dynamic rows/columns. |
+| [`SeleniumWaitsDeepDive.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/SeleniumWaitsDeepDive.java) | Implicit vs Explicit (`WebDriverWait`) vs Fluent Wait; wait for complete page/DOM load. | Why never mix implicit & explicit waits, custom polling & exception ignoring. |
+| [`WindowAndFrameHandles.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/WindowAndFrameHandles.java) | Switching tabs/windows with `getWindowHandles()`, switching to nested iframes. | `close()` vs `quit()`, switching back to parent window, `defaultContent()` vs `parentFrame()`. |
+| [`JavaScriptExecutorAndActions.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/JavaScriptExecutorAndActions.java) | Mouse hover, right click, double click, drag & drop; JS clicks, scrolling & element highlighting. | Handling `ElementClickInterceptedException`, user gestures with `.perform()`. |
+| [`DropdownAndShadowDomHandler.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/DropdownAndShadowDomHandler.java) | Standard `<select>` tags via `Select` class, custom Bootstrap dropdowns, Selenium 4 Shadow DOM. | `selectByVisibleText()`, modern non-select dropdowns, `getShadowRoot()`. |
+| [`StaleElementHandlingStrategies.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/StaleElementHandlingStrategies.java) | 4 strategies to solve `StaleElementReferenceException` (re-querying, retry loops, `ExpectedConditions.refreshed`). | DOM node detachment causes, AJAX re-renders, avoiding `@CacheLookup` on dynamic nodes. |
+| [`BrokenLinksAndImagesChecker.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/BrokenLinksAndImagesChecker.java) | Find all links (`<a>`) & images (`<img>`), verify HTTP status codes via `HttpURLConnection` in parallel. | HTTP HEAD requests, filtering javascript/mailto links, `parallelStream()`. |
+| [`ScreenshotAndAlertsHandler.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/ScreenshotAndAlertsHandler.java) | JavaScript Simple/Confirm/Prompt alerts, viewport screenshot, Selenium 4 WebElement screenshot. | `alert.accept()`, `alert.dismiss()`, `alert.sendKeys()`, `element.getScreenshotAs()`. |
+
+---
+
 ## 🧪 Automated Verification Suite
 
 Run the automated test suite in [`InterviewProgramsTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/InterviewProgramsTest.java) to verify all algorithms:
 
 ```bash
-# In IntelliJ IDEA:
-# Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest'
+# Option 1 (Standalone Main): Run directly in IntelliJ / Eclipse / VS Code
+Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest.main()'
+
+# Option 2 (JUnit 5 Suite):
+Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest'
 ```
+
