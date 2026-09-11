@@ -87,7 +87,7 @@ public class ComparableVsComparator {
         System.out.println("\n=== 3. Chained Comparator (Priority First, then Execution Time Ascending) ===");
         Comparator<TestCase> chainedComparator = Comparator
                 .comparingInt(TestCase::getPriority)
-                .thenComparing(TestCase::getExecutionTimeSeconds);
+                .thenComparingDouble(TestCase::getExecutionTimeSeconds);
         testCases.sort(chainedComparator);
         testCases.forEach(System.out::println);
     }
