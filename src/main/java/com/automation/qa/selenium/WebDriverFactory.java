@@ -47,7 +47,7 @@ public class WebDriverFactory {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1280,900");
+        options.addArguments("--window-size=1920,1080");
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--disable-blink-features=AutomationControlled");
 
@@ -91,11 +91,25 @@ public class WebDriverFactory {
 
     /**
      * Convenience helper to create the default driver.
-     * Defaults to HEADED mode (visible window). To override to headless in CI,
-     * pass `-Dheadless=true`.
+     *
+     * Smart Environment Detection:
+     * - Headed (visible window) by default on local development machines.
+     * - Automatically switches to HEADLESS mode in CI environments (GitHub Actions,
+     *   Jenkins, GitLab, etc.) or headless Linux servers without a display server.
+     * - Can also be explicitly overridden at any time via `-Dheadless=true` or `-Dheadless=false`.
      */
     public static WebDriver createDefaultDriver() {
-        boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
+        String headlessProp = System.getProperty("headless");
+        boolean headless;
+        if (headlessProp != null) {
+            headless = Boolean.parseBoolean(headlessProp);
+        } else {
+            boolean isCI = "true".equalsIgnoreCase(System.getenv("CI"))
+                    || "true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"));
+            boolean isHeadlessLinux = System.getProperty("os.name", "").toLowerCase().contains("linux")
+                    && System.getenv("DISPLAY") == null;
+            headless = isCI || isHeadlessLinux;
+        }
         return createChromeDriver(headless);
     }
 
