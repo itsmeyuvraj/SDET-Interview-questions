@@ -117,18 +117,47 @@ Most heavily asked real-time browser automation scenarios in technical interview
 | [`StaleElementHandlingStrategies.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/StaleElementHandlingStrategies.java) | 4 strategies to solve `StaleElementReferenceException` (re-querying, retry loops, `ExpectedConditions.refreshed`). | DOM node detachment causes, AJAX re-renders, avoiding `@CacheLookup` on dynamic nodes. |
 | [`BrokenLinksAndImagesChecker.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/BrokenLinksAndImagesChecker.java) | Find all links (`<a>`) & images (`<img>`), verify HTTP status codes via `HttpURLConnection` in parallel. | HTTP HEAD requests, filtering javascript/mailto links, `parallelStream()`. |
 | [`ScreenshotAndAlertsHandler.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/ScreenshotAndAlertsHandler.java) | JavaScript Simple/Confirm/Prompt alerts, viewport screenshot, Selenium 4 WebElement screenshot. | `alert.accept()`, `alert.dismiss()`, `alert.sendKeys()`, `element.getScreenshotAs()`. |
+| [`WebDriverFactory.java`](file:///Users/yuvraj/Documents/Java/src/main/java/com/automation/qa/selenium/WebDriverFactory.java) | Clean factory for initializing headless or headed ChromeDriver with production options. | Chrome for Testing resolution, `--headless=new`, sandbox flags, safe quit. |
+
+---
+
+## 🌐 Real Website Selenium Automation Suite
+
+All Selenium scenarios are executed against the industry-standard live automation sandbox: **`https://the-internet.herokuapp.com`**.
+
+Dedicated test suite: [`SeleniumRealWebsiteTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/SeleniumRealWebsiteTest.java)
+
+| # | Live Website Scenario | URL Tested | Key Assertions / Verifications |
+| :- | :--- | :--- | :--- |
+| 1 | **Page Navigation & Title** | `/` | Validates page title `"The Internet"` and `<h1>` header text. |
+| 2 | **Dynamic Loading & Explicit Wait** | `/dynamic_loading/1` | Clicks Start, waits with `WebDriverWait` for `#finish` (`"Hello World!"`). |
+| 3 | **Dynamic Web Table Parsing** | `/tables` | Parses HTML rows into `List<Map>`, asserts John Smith's email & due amount. |
+| 4 | **Dropdown Selection** | `/dropdown` | Interacts via `Select` class, selects `"Option 2"`, asserts selected text. |
+| 5 | **Broken Images Detection** | `/broken_images` | Uses JS `naturalWidth === 0` to identify client-side broken images. |
+| 6 | **JavaScript Alerts Handling** | `/javascript_alerts` | Clicks trigger, switches to alert via `switchTo().alert()`, accepts, asserts result. |
+| 7 | **Mouse Hover (Actions Class)** | `/hovers` | Hovers over avatar with `Actions.moveToElement()`, verifies user profile caption. |
+| 8 | **Multiple Windows & Tabs** | `/windows` | Opens child tab, switches window handle, validates content, returns to parent. |
 
 ---
 
 ## 🧪 Automated Verification Suite
 
-Run the automated test suite in [`InterviewProgramsTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/InterviewProgramsTest.java) to verify all algorithms:
+Run either test suite directly in **IntelliJ IDEA**, **Eclipse**, or **VS Code / Antigravity IDE**:
+
+### 1. Full Interview Suite (Java Algorithms + Real Selenium Tests)
+File: [`InterviewProgramsTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/InterviewProgramsTest.java)
 
 ```bash
-# Option 1 (Standalone Main): Run directly in IntelliJ / Eclipse / VS Code
+# Standalone Main Runner (runs 20 tests with zero config):
 Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest.main()'
-
-# Option 2 (JUnit 5 Suite):
-Right-click InterviewProgramsTest.java -> Run 'InterviewProgramsTest'
 ```
+
+### 2. Dedicated Live Website Selenium Suite
+File: [`SeleniumRealWebsiteTest.java`](file:///Users/yuvraj/Documents/Java/src/test/java/com/automation/qa/SeleniumRealWebsiteTest.java)
+
+```bash
+# Standalone Main Runner (runs all 8 live website scenarios):
+Right-click SeleniumRealWebsiteTest.java -> Run 'SeleniumRealWebsiteTest.main()'
+```
+
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -150,12 +151,72 @@ public class InterviewProgramsTest {
     }
 
     @Test
-    @DisplayName("Selenium: Broken Links Status Checker")
+    @DisplayName("Selenium: HTTP Link Status Checker")
     void testBrokenLinkChecker() {
         BrokenLinksAndImagesChecker.LinkValidationResult result = 
                 BrokenLinksAndImagesChecker.checkUrlStatus("https://www.google.com");
         assertEquals(200, result.statusCode);
         assertFalse(result.isBroken);
+    }
+
+    @Test
+    @DisplayName("Selenium Real Website: Navigation & Title Verification")
+    void testSeleniumRealWebsiteNavigation() {
+        org.openqa.selenium.WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            driver.get("https://the-internet.herokuapp.com");
+            assertEquals("The Internet", driver.getTitle());
+            assertTrue(driver.getCurrentUrl().contains("the-internet.herokuapp.com"));
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
+        }
+    }
+
+    @Test
+    @DisplayName("Selenium Real Website: Dynamic Loading with Explicit Wait")
+    void testSeleniumRealWebsiteDynamicLoading() {
+        org.openqa.selenium.WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            driver.get("https://the-internet.herokuapp.com/dynamic_loading/1");
+            driver.findElement(org.openqa.selenium.By.cssSelector("#start button")).click();
+
+            org.openqa.selenium.WebElement finish = SeleniumWaitsDeepDive.waitForElementVisible(
+                    driver, org.openqa.selenium.By.id("finish"), 15
+            );
+            assertNotNull(finish);
+            assertEquals("Hello World!", finish.getText().trim());
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
+        }
+    }
+
+    @Test
+    @DisplayName("Selenium Real Website: Dynamic Web Table Parsing")
+    void testSeleniumRealWebsiteDynamicTable() {
+        org.openqa.selenium.WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            driver.get("https://the-internet.herokuapp.com/tables");
+            List<Map<String, String>> rows = DynamicWebTableHandler.parseTableData(
+                    driver, org.openqa.selenium.By.id("table1")
+            );
+            assertFalse(rows.isEmpty());
+            assertEquals(4, rows.size());
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
+        }
+    }
+
+    @Test
+    @DisplayName("Selenium Real Website: Broken Images Detection")
+    void testSeleniumRealWebsiteBrokenImages() {
+        org.openqa.selenium.WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            driver.get("https://the-internet.herokuapp.com/broken_images");
+            List<String> brokenImages = BrokenLinksAndImagesChecker.findBrokenImages(driver);
+            assertTrue(brokenImages.size() >= 2);
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
+        }
     }
 
     /**
@@ -187,7 +248,11 @@ public class InterviewProgramsTest {
             "Palindrome Number Without String Conversion",
             "Regex Order ID & OTP Extraction",
             "Sort Map by Values",
-            "Selenium Broken Link Status Checker"
+            "Selenium HTTP Link Status Checker",
+            "Selenium Real Website: Live Navigation & Title",
+            "Selenium Real Website: Dynamic Loading & Explicit Wait",
+            "Selenium Real Website: Dynamic Web Table Parsing",
+            "Selenium Real Website: Broken Images Detection"
         };
 
         Runnable[] tests = {
@@ -209,7 +274,11 @@ public class InterviewProgramsTest {
             suite::testPalindromeNumber,
             suite::testRegexExtractors,
             suite::testSortMapByValues,
-            suite::testBrokenLinkChecker
+            suite::testBrokenLinkChecker,
+            suite::testSeleniumRealWebsiteNavigation,
+            suite::testSeleniumRealWebsiteDynamicLoading,
+            suite::testSeleniumRealWebsiteDynamicTable,
+            suite::testSeleniumRealWebsiteBrokenImages
         };
 
         for (int i = 0; i < tests.length; i++) {
@@ -220,6 +289,7 @@ public class InterviewProgramsTest {
                 passed++;
             } catch (Throwable t) {
                 System.out.printf("  [FAIL] %02d. %s -> %s\n", total, testNames[i], t.getMessage());
+                t.printStackTrace();
             }
         }
 

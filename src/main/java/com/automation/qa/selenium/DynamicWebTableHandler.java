@@ -109,11 +109,20 @@ public class DynamicWebTableHandler {
     }
 
     public static void main(String[] args) {
-        System.out.println("=== Dynamic Web Table Interview Patterns ===");
-        System.out.println("1. Dynamic XPath for Row Action Button:");
-        System.out.println("   //tr[td[normalize-space()='Jane Smith']]//button[text()='Delete']");
-        System.out.println("\n2. Finding Cell Coordinate:");
-        System.out.println("   //table[@id='data']//tr[3]/td[2]");
-        System.out.println("\n3. Data extraction into List<Map<String, String>> ready for DB assertions.");
+        System.out.println("=== Testing Dynamic Web Table on Real Live Website ===");
+        WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            driver.get("https://the-internet.herokuapp.com/tables");
+            System.out.println("Page Title: " + driver.getTitle());
+
+            // Parse Table 1 data into List of Maps
+            List<Map<String, String>> table1Data = parseTableData(driver, By.id("table1"));
+            System.out.printf("Successfully parsed %d rows from dynamic Table 1:\n", table1Data.size());
+            for (Map<String, String> row : table1Data) {
+                System.out.println("  " + row);
+            }
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
+        }
     }
 }

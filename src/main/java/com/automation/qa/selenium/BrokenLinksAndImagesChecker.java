@@ -103,17 +103,46 @@ public class BrokenLinksAndImagesChecker {
                 .toList();
     }
 
-    public static void main(String[] args) {
-        System.out.println("=== Testing Link Validation Logic ===");
-        String[] sampleUrls = {
-                "https://www.google.com",
-                "https://httpbin.org/status/404",
-                "https://httpbin.org/status/500"
-        };
+    /**
+     * Checks all images on a webpage using JavaScript naturalWidth property.
+     * NaturalWidth == 0 indicates an image failed to render (broken image).
+     * Iconic SDET interview technique!
+     */
+    public static List<String> findBrokenImages(WebDriver driver) {
+        List<WebElement> images = driver.findElements(By.tagName("img"));
+        List<String> brokenImageSources = new ArrayList<>();
 
-        for (String testUrl : sampleUrls) {
-            LinkValidationResult result = checkUrlStatus(testUrl);
-            System.out.println(result);
+        for (WebElement img : images) {
+            String src = img.getAttribute("src");
+            // Execute JS to check naturalWidth
+            Object naturalWidth = ((org.openqa.selenium.JavascriptExecutor) driver)
+                    .executeScript("return arguments[0].naturalWidth", img);
+
+            if (naturalWidth != null && ((Number) naturalWidth).intValue() == 0) {
+                brokenImageSources.add(src != null ? src : "empty_src");
+            }
+        }
+        return brokenImageSources;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("=== Testing Broken Links & Images on Real Live Website ===");
+        WebDriver driver = WebDriverFactory.createDefaultDriver();
+        try {
+            String targetUrl = "https://the-internet.herokuapp.com/broken_images";
+            driver.get(targetUrl);
+            System.out.println("Navigated to: " + driver.getTitle() + " (" + targetUrl + ")");
+
+            List<String> brokenImages = findBrokenImages(driver);
+            System.out.printf("Found %d broken images on the live page:\n", brokenImages.size());
+            for (String broken : brokenImages) {
+                System.out.println("  [BROKEN IMG] " + broken);
+            }
+
+            List<LinkValidationResult> linkResults = verifyAllPageLinks(driver);
+            System.out.printf("Validated %d total links on the live page.\n", linkResults.size());
+        } finally {
+            WebDriverFactory.quitQuietly(driver);
         }
     }
 }
